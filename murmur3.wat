@@ -29,29 +29,29 @@
     ;; Process each full 4-byte chunk of key
     (if (i32.ne (get_local $nblocks)(i32.const 0)) (then
       (loop $process
-        ;; k ← one fourByteChunk
+        ;; k <- one fourByteChunk
         (set_local $k (i32.load (get_local $i)))
-        ;; k ← k × c1
+        ;; k <- k x c1
         (set_local $k (i32.mul (get_local $k)(get_local $c1)))
-        ;; k ← (k ROL r1)
+        ;; k <- (k ROL r1)
         (set_local $k 
           (i32.or
               (i32.shl (get_local $k)(i32.const 15))
               (i32.shr_u (get_local $k)(i32.const 17))
           )
         )
-        ;; k ← k × c2
+        ;; k <- k x c2
         (set_local $k (i32.mul (get_local $k)(get_local $c2)))
-        ;; hash ← hash XOR k
+        ;; hash <- hash XOR k
         (set_local $hash (i32.xor (get_local $hash)(get_local $k)))
-        ;; hash ← (hash ROL r2)
+        ;; hash <- (hash ROL r2)
         (set_local $hash
           (i32.or
               (i32.shl (get_local $hash)(i32.const 13))
               (i32.shr_u (get_local $hash)(i32.const 19))
           )
         )
-        ;; hash ← hash × m + n
+        ;; hash <- hash x m + n
         (set_local $hash
           (i32.add 
             (i32.mul (get_local $hash)(get_local $m))
@@ -62,7 +62,7 @@
         (br_if $process (i32.lt_s (get_local $i)(get_local $tail)))
       )
     ))
-    ;; k ← 0
+    ;; k <- 0
     (set_local $k (i32.const 0))
     ;; rem - remainder (x % 4 ~ x & 00000011 ~ x & 3)
     (set_local $rem (i32.and (get_local $len)(i32.const 3)))
@@ -94,18 +94,18 @@
         (get_local $k)
         (i32.load8_u (get_local $tail))
       ))
-      ;; k ← k × c1
+      ;; k <- k x c1
       (set_local $k (i32.mul (get_local $k)(get_local $c1)))
-      ;; k ← (k ROL r1)
+      ;; k <- (k ROL r1)
       (set_local $k 
         (i32.or
             (i32.shl (get_local $k)(i32.const 15))
             (i32.shr_u (get_local $k)(i32.const 17))
         )
       )
-      ;; k ← k × c2
+      ;; k <- k x c2
       (set_local $k (i32.mul (get_local $k)(get_local $c2)))
-      ;; hash ← hash XOR k
+      ;; hash <- hash XOR k
       (set_local $hash (i32.xor (get_local $hash)(get_local $k)))
     ))
 
